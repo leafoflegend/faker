@@ -299,12 +299,19 @@ export class Datatype {
    * faker.datatype.bigInt({ max: 100n }) // 42n
    * faker.datatype.bigInt({ min: 10n, max: 100n }) // 36n
    */
-  bigInt(options?: bigint | { min?: bigint; max?: bigint }): bigint {
-    const opts = typeof options === 'bigint' ? { max: options } : options ?? {};
+  bigInt<T extends bigint | boolean | number | string = bigint>(
+    options?: T | { min?: T; max?: T }
+  ): bigint {
+    let min: bigint;
+    let max: bigint;
 
-    const min = typeof opts.min === 'bigint' ? opts.min : BigInt(0);
-    const max =
-      typeof opts.max === 'bigint' ? opts.max : min + BigInt(999999999999999);
+    if (typeof options === 'object') {
+      min = BigInt(options.min ?? 0);
+      max = BigInt(options.max ?? min + BigInt(999999999999999));
+    } else {
+      min = BigInt(0);
+      max = BigInt(options ?? 999999999999999);
+    }
 
     if (max < min) {
       throw new Error(`Max ${max} should be larger then min ${min}`);
