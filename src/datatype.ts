@@ -286,21 +286,30 @@ export class Datatype {
   /**
    * Returns a [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#bigint_type) number.
    *
-   * @param value When provided, this method simply converts it to `BigInt` type.
+   * @param options Maximum value or options object.
+   * @param options.min Lower bound for generated bigint. Defaults to `0n`.
+   * @param options.max Upper bound for generated bigint. Defaults to `min + 999999999999999n`.
+   *
+   * @throws When options define `max < min`
    *
    * @example
-   * faker.datatype.bigInt() // 8507209999914928n
-   * faker.datatype.bigInt('156') // 156n
-   * faker.datatype.bigInt(30) // 30n
-   * faker.datatype.bigInt(3000n) // 3000n
-   * faker.datatype.bigInt(true) // 1n
+   * faker.datatype.bigInt() // 55422n
+   * faker.datatype.bigInt(100n) // 52n
+   * faker.datatype.bigInt({ min: 1000000n }) // 431433n
+   * faker.datatype.bigInt({ max: 100n }) // 42n
+   * faker.datatype.bigInt({ min: 10n, max: 100n }) // 36n
    */
-  bigInt(value?: string | number | bigint | boolean): bigint {
-    if (value === undefined) {
-      value =
-        Math.floor(this.faker.datatype.number() * 99999999999) + 10000000000;
+  bigInt(options?: bigint | { min?: bigint; max?: bigint }): bigint {
+    const opts = typeof options === 'bigint' ? { max: options } : options ?? {};
+
+    const min = typeof opts.min === 'bigint' ? opts.min : BigInt(0);
+    const max =
+      typeof opts.max === 'bigint' ? opts.max : min + BigInt(999999999999999);
+
+    if (max < min) {
+      throw new Error(`Max ${max} should be larger then min ${min}`);
     }
 
-    return BigInt(value);
+    return BigInt(this.number({ min: Number(min), max: Number(max) }));
   }
 }
