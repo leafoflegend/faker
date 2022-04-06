@@ -317,6 +317,32 @@ export class Datatype {
       throw new Error(`Max ${max} should be larger then min ${min}`);
     }
 
-    return BigInt(this.number({ min: Number(min), max: Number(max) }));
+    const generateRandomBigInt = (length: number) =>
+      BigInt(
+        Array.from(
+          { length },
+          () => '0123456789'.split('')[this.number({ min: 0, max: 9 })]
+        ).join('')
+      );
+
+    const minLength = min.toString().length;
+    const maxLength = max.toString().length;
+
+    const length = this.number({
+      min: minLength,
+      max: maxLength,
+    });
+
+    let value = generateRandomBigInt(length);
+
+    while (value < min || value > max) {
+      if (value < min) {
+        value += generateRandomBigInt(minLength);
+      } else if (value > max) {
+        value -= generateRandomBigInt(maxLength);
+      }
+    }
+
+    return value;
   }
 }
