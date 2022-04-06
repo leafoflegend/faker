@@ -69,8 +69,8 @@ const seededRuns = [
         length: [79654, '2eiXX/J/*&', 86617, 60111],
       },
       bigInt: {
-        noArgs: 791775n,
-        value: 7n,
+        noArgs: 379177551410048n,
+        value: 37n,
       },
     },
   },
@@ -141,8 +141,8 @@ const seededRuns = [
         length: [56052, 21258, 54308, 3397],
       },
       bigInt: {
-        noArgs: 5122n,
-        value: 5n,
+        noArgs: 251225403255239n,
+        value: 25n,
       },
     },
   },
@@ -213,8 +213,8 @@ const seededRuns = [
         length: ['Kti5-}$_/`', 76408, 35403, 69406],
       },
       bigInt: {
-        noArgs: 48721906162743n,
-        value: 1n,
+        noArgs: 948721906162743n,
+        value: 10n,
       },
     },
   },
@@ -702,6 +702,65 @@ describe('datatype', () => {
         it('should generate a bigInt value', () => {
           const generateBigInt = faker.datatype.bigInt();
           expect(generateBigInt).toBeTypeOf('bigint');
+        });
+
+        it('should generate a big bigInt value with low delta', () => {
+          const generateBigInt = faker.datatype.bigInt({
+            min: 999999999n,
+            max: 1000000000n,
+          });
+          expect(generateBigInt).toBeTypeOf('bigint');
+        });
+
+        it('should return a random bigint given a maximum value as BigInt', () => {
+          const max = 10n;
+          expect(faker.datatype.bigInt(max) >= 0n).toBeTruthy();
+          expect(faker.datatype.bigInt(max) <= max).toBeTruthy();
+        });
+
+        it('should return a random bigint given a maximum value as Object', () => {
+          const options = { max: 10n };
+          expect(faker.datatype.bigInt(options) >= 0n).toBeTruthy();
+          expect(faker.datatype.bigInt(options) <= options.max).toBeTruthy();
+        });
+
+        it('should return a random bigint given a maximum value of 0', () => {
+          const options = { max: 0n };
+          expect(faker.datatype.bigInt(options)).toBe(0n);
+        });
+
+        it('should return a random bigint given a negative bigint minimum and maximum value of 0', () => {
+          const options = { min: -100n, max: 0n };
+          expect(faker.datatype.bigInt(options) >= options.min).toBeTruthy();
+          expect(faker.datatype.bigInt(options) <= options.max).toBeTruthy();
+        });
+
+        it('should return a random bigint between a range', () => {
+          const options = { min: 22, max: 33 };
+          for (let i = 0; i < 100; i++) {
+            const randomBigInt = faker.datatype.bigInt(options);
+            expect(randomBigInt >= options.min).toBeTruthy();
+            expect(randomBigInt <= options.max).toBeTruthy();
+          }
+        });
+
+        it('should not mutate the input object', () => {
+          const initialMin = 1n;
+          const initialOtherProperty = 'hello darkness my old friend';
+          const input: {
+            min?: bigint;
+            max?: bigint;
+            otherProperty: string;
+          } = {
+            min: initialMin,
+            otherProperty: initialOtherProperty,
+          };
+
+          faker.datatype.bigInt(input);
+
+          expect(input.min).toBe(initialMin);
+          expect(input.max).toBeUndefined();
+          expect(input.otherProperty).toBe(initialOtherProperty);
         });
       });
     }

@@ -299,8 +299,16 @@ export class Datatype {
    * faker.datatype.bigInt({ max: 100n }) // 42n
    * faker.datatype.bigInt({ min: 10n, max: 100n }) // 36n
    */
-  bigInt<T extends bigint | boolean | number | string = bigint>(
-    options?: T | { min?: T; max?: T }
+  bigInt(
+    options?:
+      | bigint
+      | boolean
+      | number
+      | string
+      | {
+          min?: bigint | boolean | number | string;
+          max?: bigint | boolean | number | string;
+        }
   ): bigint {
     let min: bigint;
     let max: bigint;
@@ -311,6 +319,10 @@ export class Datatype {
     } else {
       min = BigInt(0);
       max = BigInt(options ?? 999999999999999);
+    }
+
+    if (max === min) {
+      return min;
     }
 
     if (max < min) {
@@ -325,24 +337,10 @@ export class Datatype {
         ).join('')
       );
 
-    const minLength = min.toString().length;
-    const maxLength = max.toString().length;
+    const delta = max - min;
 
-    const length = this.number({
-      min: minLength,
-      max: maxLength,
-    });
+    const offset = generateRandomBigInt(delta.toString(10).length) % delta;
 
-    let value = generateRandomBigInt(length);
-
-    while (value < min || value > max) {
-      if (value < min) {
-        value += generateRandomBigInt(minLength);
-      } else if (value > max) {
-        value -= generateRandomBigInt(maxLength);
-      }
-    }
-
-    return value;
+    return min + offset;
   }
 }
