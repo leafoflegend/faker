@@ -69,8 +69,8 @@ const seededRuns = [
         length: [79654, '2eiXX/J/*&', 86617, 60111],
       },
       bigInt: {
-        noArgs: 3745409999962546n,
-        value: 42n,
+        noArgs: 791775n,
+        value: 7n,
       },
     },
   },
@@ -141,8 +141,8 @@ const seededRuns = [
         length: [56052, 21258, 54308, 3397],
       },
       bigInt: {
-        noArgs: 2620209999973798n,
-        value: 42n,
+        noArgs: 5122n,
+        value: 5n,
       },
     },
   },
@@ -213,8 +213,8 @@ const seededRuns = [
         length: ['Kti5-}$_/`', 76408, 35403, 69406],
       },
       bigInt: {
-        noArgs: 9285209999907148n,
-        value: 42n,
+        noArgs: 48721906162743n,
+        value: 1n,
       },
     },
   },
