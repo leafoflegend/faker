@@ -417,6 +417,17 @@ describe('datatype', () => {
           const actual = faker.datatype.bigInt(42);
           expect(actual).toEqual(expectations.bigInt.value);
         });
+
+        it('should throw when min > max', () => {
+          const min = 10000n;
+          const max = 999n;
+
+          faker.seed(seed);
+
+          expect(() => {
+            faker.datatype.bigInt({ min, max });
+          }).toThrowError(`Max ${max} should be larger then min ${min}`);
+        });
       });
     });
   }
