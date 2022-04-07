@@ -42,6 +42,26 @@ Tree shaking is not yet fully supported due to some structural issues. But we pl
 
 For now Faker supports tree-shaking for some parts, and we highly recommend that you take advantage of your bundler's tree-shaking capabilities and change how you import Faker right now.
 
+Instead of using:
+
+```ts
+// js
+const faker = require('@faker-js/faker');
+
+// ts
+import faker from '@faker-js/faker';
+```
+
+You should switch to:
+
+```ts
+// js
+const { faker } = require('@faker-js/faker');
+
+// ts
+import { faker } from '@faker-js/faker';
+```
+
 If you only need one specific language, we highly recommend to make use of the locale specific imports like:
 
 ```ts
