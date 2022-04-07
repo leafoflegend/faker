@@ -339,7 +339,8 @@ export class Datatype {
 
     const delta = max - min;
 
-    const offset = generateRandomBigInt(delta.toString(10).length) % delta;
+    const offset =
+      generateRandomBigInt(delta.toString(10).length) % (delta + BigInt(1));
 
     return min + offset;
   }
