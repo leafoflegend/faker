@@ -752,16 +752,12 @@ describe('datatype', () => {
             min?: bigint;
             max?: bigint;
             otherProperty: string;
-          } = {
+          } = Object.freeze({
             min: initialMin,
             otherProperty: initialOtherProperty,
-          };
+          });
 
-          faker.datatype.bigInt(input);
-
-          expect(input.min).toBe(initialMin);
-          expect(input.max).toBeUndefined();
-          expect(input.otherProperty).toBe(initialOtherProperty);
+          expect(() => faker.datatype.bigInt(input)).not.toThrow();
         });
       });
     }
