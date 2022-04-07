@@ -745,6 +745,14 @@ describe('datatype', () => {
           }
         });
 
+        it('should succeed with success-rate', () => {
+          const min = 0n;
+          const max = 1000000000000n;
+          const randomBigInt = faker.datatype.bigInt({ min, max });
+          expect(randomBigInt >= min).toBeTruthy();
+          expect(randomBigInt <= max).toBeTruthy();
+        });
+
         it('should not mutate the input object', () => {
           const initialMin = 1n;
           const initialOtherProperty = 'hello darkness my old friend';
