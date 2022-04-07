@@ -161,4 +161,22 @@ describe('unique', () => {
       })
     ).toThrow();
   });
+
+  it('should be possible to pass a user-specific store', () => {
+    const store = {};
+
+    const method = () => 'with conflict: 0';
+
+    expect(store).toEqual({});
+
+    expect(faker.unique(method, [], { store })).toBe('with conflict: 0');
+    expect(store).toEqual({ 'with conflict: 0': 'with conflict: 0' });
+
+    expect(() => faker.unique(method, [], { store })).toThrow();
+
+    delete store['with conflict: 0'];
+
+    expect(faker.unique(method, [], { store })).toBe('with conflict: 0');
+    expect(store).toEqual({ 'with conflict: 0': 'with conflict: 0' });
+  });
 });
