@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { faker } from '../src';
+import { faker, FakerError } from '../src';
 
 const seededRuns = [
   {
@@ -426,7 +426,9 @@ describe('datatype', () => {
 
           expect(() => {
             faker.datatype.bigInt({ min, max });
-          }).toThrowError(`Max ${max} should be larger then min ${min}`);
+          }).toThrowError(
+            new FakerError(`Max ${max} should be larger then min ${min}.`)
+          );
         });
       });
     });

@@ -1,4 +1,5 @@
 import type { Faker } from '.';
+import { FakerError } from './errors/faker-error';
 import { deprecated } from './internal/deprecated';
 
 /**
@@ -290,7 +291,7 @@ export class Datatype {
    * @param options.min Lower bound for generated bigint. Defaults to `0n`.
    * @param options.max Upper bound for generated bigint. Defaults to `min + 999999999999999n`.
    *
-   * @throws When options define `max < min`
+   * @throws When options define `max < min`.
    *
    * @example
    * faker.datatype.bigInt() // 55422n
@@ -326,9 +327,10 @@ export class Datatype {
     }
 
     if (max < min) {
-      throw new Error(`Max ${max} should be larger then min ${min}`);
+      throw new FakerError(`Max ${max} should be larger then min ${min}.`);
     }
 
+    // TODO @Shinigami92 2022-04-07: Use faker.random.numeric() from https://github.com/faker-js/faker/pull/797
     const generateRandomBigInt = (length: number) =>
       BigInt(
         Array.from(
