@@ -38,6 +38,7 @@ export class Unique {
    * @param opts.currentIterations The current attempt. This will be ignored/overwritten.
    * @param opts.exclude The value or values that should be excluded/skipped.
    * @param opts.compare The function used to determine whether a value was already returned.
+   * @param opts.store The store of unique entries.
    *
    * @example
    * faker.unique(faker.name.firstName) // 'Corbin'
@@ -52,6 +53,7 @@ export class Unique {
       currentIterations?: number;
       exclude?: RecordKey | RecordKey[];
       compare?: (obj: Record<RecordKey, RecordKey>, key: RecordKey) => 0 | -1;
+      store?: Record<RecordKey, RecordKey>;
     }
   ): ReturnType<Method> {
     opts = opts || {};

@@ -2,18 +2,18 @@ import { FakerError } from '../errors/faker-error';
 
 export type RecordKey = string | number | symbol;
 
-// global results store
-// currently uniqueness is global to entire faker instance
-// this means that faker should currently *never* return duplicate values across all API methods when using `Faker.unique`
-// it's possible in the future that some users may want to scope found per function call instead of faker instance
-const found: Record<RecordKey, RecordKey> = {};
+/**
+ * Global store of unique values.
+ * Uniqueness for entire faker instance.
+ * This means that faker should *never* return duplicate values across all API methods when using `Faker.unique` without passing `opts.store`.
+ */
+const GLOBAL_UNIQUE_STORE: Record<RecordKey, RecordKey> = {};
 
-// global exclude list of results
-// defaults to nothing excluded
+/**
+ * Global exclude list of results.
+ * Defaults to nothing excluded.
+ */
 const exclude: RecordKey[] = [];
-
-// current iteration or retries of unique.exec ( current loop depth )
-const currentIterations = 0;
 
 // uniqueness compare function
 // default behavior is to check value as key against object hash
@@ -31,14 +31,18 @@ function defaultCompare(
 function errorMessage(
   now: number,
   code: string,
-  opts: { startTime: number }
+  opts: {
+    startTime: number;
+    currentIterations: number;
+    store: Record<RecordKey, RecordKey>;
+  }
 ): never {
   console.error('error', code);
   console.log(
     'found',
-    Object.keys(found).length,
+    Object.keys(opts.store).length,
     'unique entries before throwing error. \nretried:',
-    currentIterations,
+    opts.currentIterations,
     '\ntotal time:',
     now - opts.startTime,
     'ms'
@@ -59,6 +63,7 @@ export function exec<Method extends (...parameters) => RecordKey>(
     compare?: (obj: Record<RecordKey, RecordKey>, key: RecordKey) => 0 | -1;
     currentIterations?: number;
     startTime?: number;
+    store?: Record<RecordKey, RecordKey>;
   }
 ): ReturnType<Method> {
   const now = new Date().getTime();
@@ -68,6 +73,7 @@ export function exec<Method extends (...parameters) => RecordKey>(
   opts.maxRetries = opts.maxRetries || 50;
   opts.exclude = opts.exclude || exclude;
   opts.compare = opts.compare || defaultCompare;
+  opts.store = opts.store || GLOBAL_UNIQUE_STORE;
 
   if (typeof opts.currentIterations !== 'number') {
     opts.currentIterations = 0;
@@ -112,10 +118,10 @@ export function exec<Method extends (...parameters) => RecordKey>(
 
   // if the result has not been previously found, add it to the found array and return the value as it's unique
   if (
-    opts.compare(found, result) === -1 &&
+    opts.compare(opts.store, result) === -1 &&
     opts.exclude.indexOf(result) === -1
   ) {
-    found[result] = result;
+    opts.store[result] = result;
     opts.currentIterations = 0;
     return result;
   } else {
