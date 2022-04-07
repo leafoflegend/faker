@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { faker } from '../src';
+import { faker, FakerError } from '../src';
 import { times } from './support/times';
 
 describe('random', () => {
@@ -275,6 +275,63 @@ describe('random', () => {
           bannedChars,
         })
       ).toThrowError();
+    });
+  });
+
+  describe('numeric', () => {
+    it('should return single digit when no length provided', () => {
+      const actual = faker.random.numeric();
+
+      expect(actual).toHaveLength(1);
+    });
+
+    it.each(times(100))(
+      'should generate random value with a length of %s',
+      (length) => {
+        const actual = faker.random.numeric(length);
+
+        expect(actual).toHaveLength(length);
+      }
+    );
+
+    it('should never start with a leading zero', () => {
+      for (const iter of times(1000)) {
+        const actual = faker.random.numeric(1000);
+
+        expect(actual).not.toMatch(/^0/);
+      }
+    });
+
+    it('should return a valid numeric string', () => {
+      const actual = faker.random.numeric();
+
+      expect(actual).toBeTypeOf('string');
+      expect(actual).toMatch(/^[1-9]$/);
+    });
+
+    it('should return a valid numeric string with provided length', () => {
+      const actual = faker.random.numeric(1000);
+
+      expect(actual).toBeTypeOf('string');
+      expect(actual).toMatch(/^[1-9][0-9]+$/);
+    });
+
+    it('should throw error if passed length less then or equals to 0', () => {
+      expect(() => faker.random.numeric(0)).toThrowError(
+        new FakerError(
+          'Minimum length for numeric string should be greater than or equals to 1.'
+        )
+      );
+      expect(() => faker.random.numeric(-1)).toThrowError(
+        new FakerError(
+          'Minimum length for numeric string should be greater than or equals to 1.'
+        )
+      );
+      expect(() => faker.random.numeric(-100)).toThrowError(
+        new FakerError(
+          'Minimum length for numeric string should be greater than or equals to 1.'
+        )
+      );
     });
   });
 

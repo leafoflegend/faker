@@ -543,20 +543,36 @@ export class Random {
   /**
    * Generating a string consisting of digits based on length.
    *
+   * The minimum value will be `'1'`.
+   *
    * @param length The number of digits to generate. Defaults to `1`.
+   *
+   * @throws When `length` is less than or equals to `0`.
    *
    * @example
    * faker.random.numeric() // '2'
    * faker.random.numeric(5) // '31507'
    */
   numeric(length: number = 1): string {
-    return Array.from(
+    if (length < 1) {
+      throw new FakerError(
+        'Minimum length for numeric string should be greater than or equals to 1.'
+      );
+    }
+
+    let result = Array.from(
       { length },
       () =>
         '0123456789'.split('')[this.faker.datatype.number({ min: 0, max: 9 })]
     )
       .join('')
       .replace(/^0+/, '');
+
+    while (result.length < length) {
+      result += this.faker.datatype.number({ min: 0, max: 9 });
+    }
+
+    return result;
   }
 
   /**
