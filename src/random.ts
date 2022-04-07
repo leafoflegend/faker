@@ -541,6 +541,25 @@ export class Random {
   }
 
   /**
+   * Generating a string consisting of digits based on length.
+   *
+   * @param length The number of digits to generate. Defaults to `1`.
+   *
+   * @example
+   * faker.random.numeric() // '2'
+   * faker.random.numeric(5) // '31507'
+   */
+  numeric(length: number = 1): string {
+    return Array.from(
+      { length },
+      () =>
+        '0123456789'.split('')[this.faker.datatype.number({ min: 0, max: 9 })]
+    )
+      .join('')
+      .replace(/^0+/, '');
+  }
+
+  /**
    * Returns a hexadecimal number.
    *
    * @param count Length of the generated number. Defaults to `1`.
