@@ -705,11 +705,12 @@ describe('datatype', () => {
         });
 
         it('should generate a big bigInt value with low delta', () => {
-          const generateBigInt = faker.datatype.bigInt({
-            min: 999999999n,
-            max: 1000000000n,
-          });
+          const min = 999999999n;
+          const max = 1000000000n;
+          const generateBigInt = faker.datatype.bigInt({ min, max });
           expect(generateBigInt).toBeTypeOf('bigint');
+          expect(generateBigInt >= min).toBeTruthy();
+          expect(generateBigInt <= max).toBeTruthy();
         });
 
         it('should return a random bigint given a maximum value as BigInt', () => {
