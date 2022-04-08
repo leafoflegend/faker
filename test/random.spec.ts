@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { faker, FakerError } from '../src';
 import { times } from './support/times';
 
+// TODO @Shinigami92 2022-04-08: Add seeded runs
+
 describe('random', () => {
   describe('arrayElement', () => {
     it('should return a random element in the array', () => {
@@ -294,12 +296,16 @@ describe('random', () => {
       }
     );
 
-    it('should never start with a leading zero', () => {
-      for (const iter of times(1000)) {
-        const actual = faker.random.numeric(1000);
+    it('should return empty string with a length of 0', () => {
+      const actual = faker.random.numeric(0);
 
-        expect(actual).not.toMatch(/^0/);
-      }
+      expect(actual).toHaveLength(0);
+    });
+
+    it('should return empty string with a negative length', () => {
+      const actual = faker.random.numeric(-10);
+
+      expect(actual).toHaveLength(0);
     });
 
     it('should return a valid numeric string', () => {
@@ -316,20 +322,30 @@ describe('random', () => {
       expect(actual).toMatch(/^[1-9][0-9]+$/);
     });
 
-    it('should throw error if passed length less then or equals to 0', () => {
-      expect(() => faker.random.numeric(0)).toThrowError(
+    it('should allow leading zeros via option', () => {
+      const actual = faker.random.numeric(15, { allowLeadingZeros: true });
+
+      expect(actual).toMatch(/^[0-9]+$/);
+    });
+
+    it('should allow leading zeros via option and all other digits banned', () => {
+      const actual = faker.random.numeric(4, {
+        allowLeadingZeros: true,
+        bannedDigits: '123456789'.split(''),
+      });
+
+      expect(actual).toBe('0000');
+    });
+
+    it('should allow leading zeros via option and all other digits banned', () => {
+      expect(() =>
+        faker.random.numeric(4, {
+          allowLeadingZeros: false,
+          bannedDigits: '123456789'.split(''),
+        })
+      ).toThrowError(
         new FakerError(
-          'Minimum length for numeric string should be greater than or equals to 1.'
-        )
-      );
-      expect(() => faker.random.numeric(-1)).toThrowError(
-        new FakerError(
-          'Minimum length for numeric string should be greater than or equals to 1.'
-        )
-      );
-      expect(() => faker.random.numeric(-100)).toThrowError(
-        new FakerError(
-          'Minimum length for numeric string should be greater than or equals to 1.'
+          'Unable to generate numeric string, because all possible digits are banned.'
         )
       );
     });

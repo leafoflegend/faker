@@ -543,33 +543,61 @@ export class Random {
   /**
    * Generating a string consisting of digits based on length.
    *
-   * The minimum value will be `'1'`.
-   *
    * @param length The number of digits to generate. Defaults to `1`.
-   *
-   * @throws When `length` is less than or equals to `0`.
+   * @param options The options to use. Defaults to `{}`.
+   * @param options.allowLeadingZeros If true, leading zeros will be allowed. Defaults to `false`.
+   * @param options.bannedDigits An array of digits which should be banned in the generated string. Defaults to `[]`.
    *
    * @example
    * faker.random.numeric() // '2'
    * faker.random.numeric(5) // '31507'
+   * faker.random.numeric(42) // '56434563150765416546479875435481513188548'
+   * faker.random.numeric(42, { allowLeadingZeros: true }) // '00564846278453876543517840713421451546115'
+   * faker.random.numeric(6, { bannedDigits: ['0'] }) // '943228'
    */
-  numeric(length: number = 1): string {
-    if (length < 1) {
+  numeric(
+    length: number = 1,
+    options: {
+      allowLeadingZeros?: boolean;
+      // TODO @Shinigami92 2022-04-08: Make `bannedDigits` LiteralUnion<Digit>[] in a separate PR
+      // Make something like this also for the other functions (alpha, alphaNumeric)
+      bannedDigits?: ReadonlyArray<string>;
+    } = {}
+  ): string {
+    if (length <= 0) {
+      return '';
+    }
+
+    const { allowLeadingZeros = false, bannedDigits = [] } = options;
+
+    const joinedBannedDigits =
+      bannedDigits.length > 0
+        ? Array.from(new Set([...bannedDigits]))
+            .filter((char) => /^[0-9]$/.test(char))
+            .join('')
+        : '';
+
+    if (
+      joinedBannedDigits === '0123456789' ||
+      (!allowLeadingZeros && joinedBannedDigits.endsWith('123456789'))
+    ) {
       throw new FakerError(
-        'Minimum length for numeric string should be greater than or equals to 1.'
+        'Unable to generate numeric string, because all possible digits are banned.'
       );
     }
 
-    let result = Array.from(
-      { length },
-      () =>
-        '0123456789'.split('')[this.faker.datatype.number({ min: 0, max: 9 })]
-    )
-      .join('')
-      .replace(/^0+/, '');
+    let result = '';
+
+    if (!allowLeadingZeros && !bannedDigits.includes('0')) {
+      result += this.faker.datatype.number({ min: 1, max: 9 });
+    }
 
     while (result.length < length) {
-      result += this.faker.datatype.number({ min: 0, max: 9 });
+      const digit = String(this.faker.datatype.number({ min: 0, max: 9 }));
+      if (bannedDigits.includes(digit)) {
+        continue;
+      }
+      result += digit;
     }
 
     return result;
