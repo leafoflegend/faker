@@ -541,7 +541,7 @@ export class Random {
   }
 
   /**
-   * Generating a string consisting of digits based on length.
+   * Generates a string consisting of digits based on length.
    *
    * @param length The number of digits to generate. Defaults to `1`.
    * @param options The options to use. Defaults to `{}`.

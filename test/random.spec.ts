@@ -285,6 +285,7 @@ describe('random', () => {
       const actual = faker.random.numeric();
 
       expect(actual).toHaveLength(1);
+      expect(actual).toMatch(/^[1-9]$/);
     });
 
     it.each(times(100))(
@@ -293,6 +294,8 @@ describe('random', () => {
         const actual = faker.random.numeric(length);
 
         expect(actual).toHaveLength(length);
+        expect(actual).toMatch(/^[1-9]/);
+        expect(actual).toMatch(/[0-9]+$/);
       }
     );
 
@@ -306,13 +309,6 @@ describe('random', () => {
       const actual = faker.random.numeric(-10);
 
       expect(actual).toHaveLength(0);
-    });
-
-    it('should return a valid numeric string', () => {
-      const actual = faker.random.numeric();
-
-      expect(actual).toBeTypeOf('string');
-      expect(actual).toMatch(/^[1-9]$/);
     });
 
     it('should return a valid numeric string with provided length', () => {
@@ -337,7 +333,7 @@ describe('random', () => {
       expect(actual).toBe('0000');
     });
 
-    it('should allow leading zeros via option and all other digits banned', () => {
+    it('should fail on leading zeros via option and all other digits banned', () => {
       expect(() =>
         faker.random.numeric(4, {
           allowLeadingZeros: false,
@@ -350,7 +346,7 @@ describe('random', () => {
       );
     });
 
-    it('should ban all digits pass via bannedDigits', () => {
+    it('should ban all digits passed via bannedDigits', () => {
       const actual = faker.random.numeric(1000, {
         bannedDigits: 'c84U1'.split(''),
       });
