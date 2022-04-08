@@ -577,9 +577,15 @@ export class Random {
             .join('')
         : '';
 
+    const allowedDigits = '0123456789'
+      .split('')
+      .filter((digit) => !joinedBannedDigits.includes(digit));
+
     if (
-      joinedBannedDigits === '0123456789' ||
-      (!allowLeadingZeros && joinedBannedDigits.endsWith('123456789'))
+      allowedDigits.length === 0 ||
+      (allowedDigits.length === 1 &&
+        !allowLeadingZeros &&
+        allowedDigits[0] === '0')
     ) {
       throw new FakerError(
         'Unable to generate numeric string, because all possible digits are banned.'
@@ -589,15 +595,13 @@ export class Random {
     let result = '';
 
     if (!allowLeadingZeros && !bannedDigits.includes('0')) {
-      result += this.faker.datatype.number({ min: 1, max: 9 });
+      result += this.arrayElement(
+        allowedDigits.filter((digit) => digit !== '0')
+      );
     }
 
     while (result.length < length) {
-      const digit = String(this.faker.datatype.number({ min: 0, max: 9 }));
-      if (bannedDigits.includes(digit)) {
-        continue;
-      }
-      result += digit;
+      result += this.arrayElement(allowedDigits);
     }
 
     return result;

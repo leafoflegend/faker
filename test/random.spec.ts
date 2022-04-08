@@ -349,6 +349,15 @@ describe('random', () => {
         )
       );
     });
+
+    it('should ban all digits pass via bannedDigits', () => {
+      const actual = faker.random.numeric(1000, {
+        bannedDigits: 'c84U1'.split(''),
+      });
+
+      expect(actual).toHaveLength(1000);
+      expect(actual).toMatch(/^[0235679]{1000}$/);
+    });
   });
 
   describe('deprecation warnings', () => {
