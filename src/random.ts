@@ -570,16 +570,9 @@ export class Random {
 
     const { allowLeadingZeros = false, bannedDigits = [] } = options;
 
-    const joinedBannedDigits =
-      bannedDigits.length > 0
-        ? Array.from(new Set([...bannedDigits]))
-            .filter((char) => /^[0-9]$/.test(char))
-            .join('')
-        : '';
-
     const allowedDigits = '0123456789'
       .split('')
-      .filter((digit) => !joinedBannedDigits.includes(digit));
+      .filter((digit) => !bannedDigits.includes(digit));
 
     if (
       allowedDigits.length === 0 ||
