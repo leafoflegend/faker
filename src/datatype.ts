@@ -330,19 +330,15 @@ export class Datatype {
       throw new FakerError(`Max ${max} should be larger then min ${min}.`);
     }
 
-    // TODO @Shinigami92 2022-04-07: Use faker.random.numeric() from https://github.com/faker-js/faker/pull/797
-    const generateRandomBigInt = (length: number) =>
-      BigInt(
-        Array.from(
-          { length },
-          () => '0123456789'.split('')[this.number({ min: 0, max: 9 })]
-        ).join('')
-      );
-
     const delta = max - min;
 
     const offset =
-      generateRandomBigInt(delta.toString(10).length) % (delta + BigInt(1));
+      BigInt(
+        this.faker.random.numeric(delta.toString(10).length, {
+          allowLeadingZeros: true,
+        })
+      ) %
+      (delta + BigInt(1));
 
     return min + offset;
   }
