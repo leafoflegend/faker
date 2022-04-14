@@ -1,354 +1,182 @@
+import { resolve } from 'path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { faker } from '../src';
+import { ExpectationStore } from './support/expectation-store';
 
 const seededRuns = [
   {
     seed: 42,
-    expectations: {
-      city: 'Port Valentine',
-      cityPrefix: 'West',
-      citySuffix: 'bury',
-      cityName: 'Gulfport',
-      streetName: 'Valentine Isle',
-      streetPrefix: 'b',
-      streetSuffix: 'Isle',
-      streetAddressDigits: 4,
-      fullStreetAddress: '7917 Lauryn Spur Apt. 410',
-      secondaryAddress: 'Apt. 791',
-      county: 'Berkshire',
-      country: 'Haiti',
-      countryCode: 'GY',
-      state: 'Maine',
-      stateAbbr: 'ME',
-      zipCode: '79177',
-      direction: 'South',
-      directionNonAbbr: 'South',
-      directionAbbr: 'S',
-      ordinalDirection: 'Northwest',
-      ordinalDirectionAbbr: 'NW',
-      cardinalDirection: 'East',
-      cardinalDirectionAbbr: 'E',
-      timeZone: 'Europe/Amsterdam',
-      nearbyGpsCoordinates: ['-0.0394', '0.0396'],
+    streetAddress: {
+      normal: '7917 Lauryn Spur',
+      full: '7917 Lauryn Spur Apt. 410',
     },
+    direction: {
+      normal: 'South',
+      full: 'South',
+      abbr: 'S',
+    },
+    ordinalDirection: {
+      full: 'Northwest',
+      abbr: 'NW',
+    },
+    cardinalDirection: {
+      normal: 'East',
+      full: 'East',
+      abbr: 'E',
+    },
+    city: 'Port Valentine',
+    cityPrefix: 'West',
+    citySuffix: 'bury',
+    cityName: 'Gulfport',
+    streetName: 'Valentine Isle',
+    streetPrefix: 'b',
+    streetSuffix: 'Isle',
+    secondaryAddress: 'Apt. 791',
+    county: 'Berkshire',
+    country: 'Haiti',
+    countryCode: 'GY',
+    state: 'Maine',
+    stateAbbr: 'ME',
+    zipCode: '79177',
+    timeZone: 'Europe/Amsterdam',
+    nearbyGPSCoordinate: ['-22.5828', '106.7555'],
   },
   {
     seed: 1337,
-    expectations: {
-      city: 'New Carmelo',
-      cityPrefix: 'West',
-      citySuffix: 'boro',
-      cityName: 'Dubuque',
-      streetName: 'Carmelo Forks',
-      streetPrefix: 'a',
-      streetSuffix: 'Forks',
-      streetAddressDigits: 5,
-      fullStreetAddress: '51225 Hammes Lodge Apt. 552',
-      secondaryAddress: 'Apt. 512',
-      county: 'Bedfordshire',
-      country: 'Equatorial Guinea',
-      countryCode: 'EH',
-      state: 'Indiana',
-      stateAbbr: 'IN',
-      zipCode: '51225',
-      direction: 'South',
-      directionNonAbbr: 'South',
-      directionAbbr: 'S',
-      ordinalDirection: 'Northwest',
-      ordinalDirectionAbbr: 'NW',
-      cardinalDirection: 'East',
-      cardinalDirectionAbbr: 'E',
-      timeZone: 'Africa/Casablanca',
-      nearbyGpsCoordinates: ['-0.0042', '0.0557'],
+    streetAddress: {
+      normal: '51225 Hammes Lodge',
+      full: '51225 Hammes Lodge Apt. 552',
     },
+    direction: {
+      normal: 'South',
+      full: 'South',
+      abbr: 'S',
+    },
+    ordinalDirection: {
+      full: 'Northwest',
+      abbr: 'NW',
+    },
+    cardinalDirection: {
+      normal: 'East',
+      full: 'East',
+      abbr: 'E',
+    },
+    city: 'New Carmelo',
+    cityPrefix: 'West',
+    citySuffix: 'boro',
+    cityName: 'Dubuque',
+    streetName: 'Carmelo Forks',
+    streetPrefix: 'a',
+    streetSuffix: 'Forks',
+    secondaryAddress: 'Apt. 512',
+    county: 'Bedfordshire',
+    country: 'Equatorial Guinea',
+    countryCode: 'EH',
+    state: 'Indiana',
+    stateAbbr: 'IN',
+    zipCode: '51225',
+    timeZone: 'Africa/Casablanca',
+    nearbyGPSCoordinate: ['-42.8356', '21.7907'],
   },
   {
     seed: 1211,
-    expectations: {
-      city: 'La Crosse',
-      cityPrefix: 'Fort',
-      citySuffix: 'shire',
-      cityName: 'Urbana',
-      streetName: 'Trantow Via',
-      streetPrefix: 'c',
-      streetSuffix: 'Via',
-      streetAddressDigits: 3,
-      fullStreetAddress: '487 Zieme Flat Apt. 616',
-      secondaryAddress: 'Suite 487',
-      county: 'Cambridgeshire',
-      country: 'Uganda',
-      countryCode: 'UM',
-      state: 'Washington',
-      stateAbbr: 'WA',
-      zipCode: '48721-9061',
-      direction: 'Southwest',
-      directionNonAbbr: 'Southwest',
-      directionAbbr: 'SW',
-      ordinalDirection: 'Southwest',
-      ordinalDirectionAbbr: 'SW',
-      cardinalDirection: 'West',
-      cardinalDirectionAbbr: 'W',
-      timeZone: 'Asia/Magadan',
-      nearbyGpsCoordinates: ['0.0503', '-0.0242'],
+    streetAddress: {
+      normal: '487 Zieme Flat',
+      full: '487 Zieme Flat Apt. 616',
     },
+    direction: {
+      normal: 'Southwest',
+      full: 'Southwest',
+      abbr: 'SW',
+    },
+    ordinalDirection: {
+      full: 'Southwest',
+      abbr: 'SW',
+    },
+    cardinalDirection: {
+      normal: 'West',
+      full: 'West',
+      abbr: 'W',
+    },
+    city: 'La Crosse',
+    cityPrefix: 'Fort',
+    citySuffix: 'shire',
+    cityName: 'Urbana',
+    streetName: 'Trantow Via',
+    streetPrefix: 'c',
+    streetSuffix: 'Via',
+    secondaryAddress: 'Suite 487',
+    county: 'Cambridgeshire',
+    country: 'Uganda',
+    countryCode: 'UM',
+    state: 'Washington',
+    stateAbbr: 'WA',
+    zipCode: '48721-9061',
+    timeZone: 'Asia/Magadan',
+    nearbyGPSCoordinate: ['77.1337', '-14.7545'],
   },
 ];
 
 const NON_SEEDED_BASED_RUN = 5;
+const expectationStore = new ExpectationStore(
+  seededRuns,
+  faker,
+  resolve('test', 'address.actual.json')
+);
 
 describe('address', () => {
   afterEach(() => {
     faker.locale = 'en';
   });
 
-  for (const { seed, expectations } of seededRuns) {
-    describe(`seed: ${seed}`, () => {
-      it('city()', () => {
-        faker.seed(seed);
+  expectationStore.describe((f) => {
+    f.it('city', (faker) => faker.address.city())
+      .it('cityPrefix', (faker) => faker.address.cityPrefix())
+      .it('citySuffix', (faker) => faker.address.citySuffix())
+      .it('cityName', (faker) => faker.address.cityName())
 
-        const city = faker.address.city();
-        expect(city).toEqual(expectations.city);
-      });
+      .it('streetName', (faker) => faker.address.streetName())
+      .describe('streetAddress', (f) => {
+        f.it('normal', (faker) => faker.address.streetAddress());
+        f.it('full', (faker) => faker.address.streetAddress(true));
+      })
+      .it('streetPrefix', (faker) => faker.address.streetPrefix())
+      .it('streetSuffix', (faker) => faker.address.streetSuffix())
+      .it('secondaryAddress', (faker) => faker.address.secondaryAddress())
 
-      it('cityPrefix()', () => {
-        faker.seed(seed);
+      .it('county', (faker) => faker.address.county())
+      .it('country', (faker) => faker.address.country())
+      .it('countryCode', (faker) => faker.address.countryCode())
+      .it('state', (faker) => faker.address.state())
+      .it('stateAbbr', (faker) => faker.address.stateAbbr())
 
-        const cityPrefix = faker.address.cityPrefix();
-        expect(cityPrefix).toEqual(expectations.cityPrefix);
-      });
+      .it('zipCode', (faker) => faker.address.zipCode())
 
-      it('citySuffix()', () => {
-        faker.seed(seed);
+      .describe('direction', (f) => {
+        f.it('normal', (faker) => faker.address.direction());
+        f.it('full', (faker) => faker.address.direction(false));
+        f.it('abbr', (faker) => faker.address.direction(true));
+      })
 
-        const citySuffix = faker.address.citySuffix();
-        expect(citySuffix).toEqual(expectations.citySuffix);
-      });
+      .describe('ordinalDirection', (f) => {
+        f.it('full', (faker) => faker.address.ordinalDirection());
+        f.it('full', (faker) => faker.address.ordinalDirection(false));
+        f.it('abbr', (faker) => faker.address.ordinalDirection(true));
+      })
 
-      it('cityName()', () => {
-        faker.seed(seed);
+      .describe('cardinalDirection', (f) => {
+        f.it('normal', (faker) => faker.address.cardinalDirection());
+        f.it('full', (faker) => faker.address.cardinalDirection(false));
+        f.it('abbr', (faker) => faker.address.cardinalDirection(true));
+      })
 
-        const cityName = faker.address.cityName();
-        expect(cityName).toEqual(expectations.cityName);
-      });
-
-      it('streetName()', () => {
-        faker.seed(seed);
-
-        const street_name = faker.address.streetName();
-        expect(street_name).toEqual(expectations.streetName);
-      });
-
-      describe('streetAddress()', () => {
-        it('should return a digit street number', () => {
-          faker.seed(seed);
-
-          const address = faker.address.streetAddress();
-          const parts = address.split(' ');
-
-          expect(
-            parts[0].length,
-            `The street number should have ${expectations.streetAddressDigits} digits`
-          ).toStrictEqual(expectations.streetAddressDigits);
-        });
-
-        describe('when useFulladdress is true', () => {
-          it('adds a secondary address to the result', () => {
-            faker.seed(seed);
-
-            const address = faker.address.streetAddress(true);
-            expect(address).toEqual(expectations.fullStreetAddress);
-          });
-        });
-      });
-
-      it('streetPrefix()', () => {
-        faker.seed(seed);
-
-        const streetPrefix = faker.address.streetPrefix();
-        expect(streetPrefix).toEqual(expectations.streetPrefix);
-      });
-
-      it('streetSuffix()', () => {
-        faker.seed(seed);
-
-        const streetSuffix = faker.address.streetSuffix();
-        expect(streetSuffix).toEqual(expectations.streetSuffix);
-      });
-
-      describe('secondaryAddress()', () => {
-        it('randomly chooses an Apt or Suite number', () => {
-          faker.seed(seed);
-
-          const address = faker.address.secondaryAddress();
-          expect(address).toEqual(expectations.secondaryAddress);
-        });
-      });
-
-      describe('county()', () => {
-        it('returns random county', () => {
-          faker.seed(seed);
-
-          const county = faker.address.county();
-          expect(county).toEqual(expectations.county);
-        });
-      });
-
-      describe('country()', () => {
-        it('returns random country', () => {
-          faker.seed(seed);
-
-          const country = faker.address.country();
-          expect(country).toEqual(expectations.country);
-        });
-      });
-
-      describe('countryCode()', () => {
-        it('returns random countryCode', () => {
-          faker.seed(seed);
-
-          const countryCode = faker.address.countryCode();
-          expect(countryCode).toEqual(expectations.countryCode);
-        });
-      });
-
-      describe('state()', () => {
-        it('returns random state', () => {
-          faker.seed(seed);
-
-          const state = faker.address.state();
-          expect(state).toEqual(expectations.state);
-        });
-      });
-
-      describe('stateAbbr()', () => {
-        it('returns random stateAbbr', () => {
-          faker.seed(seed);
-
-          const stateAbbr = faker.address.stateAbbr();
-          expect(stateAbbr).toEqual(expectations.stateAbbr);
-        });
-      });
-
-      describe('zipCode()', () => {
-        it('returns random zipCode', () => {
-          faker.seed(seed);
-
-          const zipCode = faker.address.zipCode();
-          expect(zipCode).toEqual(expectations.zipCode);
-        });
-      });
-
-      describe('direction()', () => {
-        it('returns random direction', () => {
-          faker.seed(seed);
-
-          const direction = faker.address.direction();
-          const expected = expectations.direction;
-
-          expect(
-            direction,
-            `The random direction should be equal to ${expected}`
-          ).toBe(expected);
-        });
-
-        it('should not return abbreviation when useAbbr is false', () => {
-          faker.seed(seed);
-
-          const direction = faker.address.direction(false);
-          const expected = expectations.directionNonAbbr;
-
-          expect(
-            direction,
-            `The abbreviation of direction when useAbbr is false should be equal ${expected}. Current is ${direction}`
-          ).toBe(expected);
-        });
-
-        it('returns abbreviation when useAbbr is true', () => {
-          faker.seed(seed);
-
-          const direction = faker.address.direction(true);
-          const expected = expectations.directionAbbr;
-
-          expect(
-            direction,
-            `The abbreviation of direction when useAbbr is true should be equal ${expected}. Current is ${direction}`
-          ).toBe(expected);
-        });
-      });
-
-      describe('ordinalDirection()', () => {
-        it('returns random ordinal direction', () => {
-          faker.seed(seed);
-
-          const ordinalDirection = faker.address.ordinalDirection();
-          const expected = expectations.ordinalDirection;
-
-          expect(
-            ordinalDirection,
-            `The ransom ordinal direction should be equal ${expected}. Current is ${ordinalDirection}`
-          ).toBe(expected);
-        });
-
-        it('returns abbreviation when useAbbr is true', () => {
-          faker.seed(seed);
-
-          const ordinalDirection = faker.address.ordinalDirection(true);
-          const expected = expectations.ordinalDirectionAbbr;
-
-          expect(
-            ordinalDirection,
-            `The ordinal direction when useAbbr is true should be equal ${expected}. Current is ${ordinalDirection}`
-          ).toBe(expected);
-        });
-      });
-
-      describe('cardinalDirection()', () => {
-        it('returns random cardinal direction', () => {
-          faker.seed(seed);
-
-          const cardinalDirection = faker.address.cardinalDirection();
-          const expected = expectations.cardinalDirection;
-
-          expect(
-            cardinalDirection,
-            `The random cardinal direction should be equal ${expected}. Current is ${cardinalDirection}`
-          ).toBe(expected);
-        });
-
-        it('returns abbreviation when useAbbr is true', () => {
-          faker.seed(seed);
-
-          const cardinalDirection = faker.address.cardinalDirection(true);
-          const expected = expectations.cardinalDirectionAbbr;
-
-          expect(
-            cardinalDirection,
-            `The cardinal direction when useAbbr is true should be equal ${expected}. Current is ${cardinalDirection}`
-          ).toBe(expected);
-        });
-      });
-
-      describe('timeZone()', () => {
-        it('returns random timeZone', () => {
-          faker.seed(seed);
-
-          const timeZone = faker.address.timeZone();
-          expect(timeZone).toEqual(expectations.timeZone);
-        });
-      });
-
-      describe('nearbyGPSCoordinate()', () => {
-        it('returns expected coordinates', () => {
-          faker.seed(seed);
-
-          // this input is required for all expected results for this function
-          const coordsInput: [number, number] = [0, 0];
-          const coords = faker.address.nearbyGPSCoordinate(coordsInput);
-          expect(coords).toEqual(expectations.nearbyGpsCoordinates);
-        });
-      });
-    });
-  }
+      .it('timeZone', (faker) => faker.address.timeZone())
+      .it(
+        'nearbyGPSCoordinate',
+        (faker) => faker.address.nearbyGPSCoordinate(),
+        'toEqual'
+      );
+  });
 
   // Create and log-back the seed for debug purposes
   faker.seed(Math.ceil(Math.random() * 1_000_000_000));

@@ -1,0 +1,113 @@
+[
+  {
+    "seed": 42,
+    "streetAddress": {
+      "normal": "7917 Lauryn Spur",
+      "full": "7917 Lauryn Spur Apt. 410"
+    },
+    "direction": {
+      "normal": "South",
+      "full": "South",
+      "abbr": "S"
+    },
+    "ordinalDirection": {
+      "full": "Northwest",
+      "abbr": "NW"
+    },
+    "cardinalDirection": {
+      "normal": "East",
+      "full": "East",
+      "abbr": "E"
+    },
+    "city": "Port Valentine",
+    "cityPrefix": "West",
+    "citySuffix": "bury",
+    "cityName": "Gulfport",
+    "streetName": "Valentine Isle",
+    "streetPrefix": "b",
+    "streetSuffix": "Isle",
+    "secondaryAddress": "Apt. 791",
+    "county": "Berkshire",
+    "country": "Haiti",
+    "countryCode": "GY",
+    "state": "Maine",
+    "stateAbbr": "ME",
+    "zipCode": "79177",
+    "timeZone": "Europe/Amsterdam",
+    "nearbyGPSCoordinate": ["-22.5828", "106.7555"]
+  },
+  {
+    "seed": 1337,
+    "streetAddress": {
+      "normal": "51225 Hammes Lodge",
+      "full": "51225 Hammes Lodge Apt. 552"
+    },
+    "direction": {
+      "normal": "South",
+      "full": "South",
+      "abbr": "S"
+    },
+    "ordinalDirection": {
+      "full": "Northwest",
+      "abbr": "NW"
+    },
+    "cardinalDirection": {
+      "normal": "East",
+      "full": "East",
+      "abbr": "E"
+    },
+    "city": "New Carmelo",
+    "cityPrefix": "West",
+    "citySuffix": "boro",
+    "cityName": "Dubuque",
+    "streetName": "Carmelo Forks",
+    "streetPrefix": "a",
+    "streetSuffix": "Forks",
+    "secondaryAddress": "Apt. 512",
+    "county": "Bedfordshire",
+    "country": "Equatorial Guinea",
+    "countryCode": "EH",
+    "state": "Indiana",
+    "stateAbbr": "IN",
+    "zipCode": "51225",
+    "timeZone": "Africa/Casablanca",
+    "nearbyGPSCoordinate": ["-42.8356", "21.7907"]
+  },
+  {
+    "seed": 1211,
+    "streetAddress": {
+      "normal": "487 Zieme Flat",
+      "full": "487 Zieme Flat Apt. 616"
+    },
+    "direction": {
+      "normal": "Southwest",
+      "full": "Southwest",
+      "abbr": "SW"
+    },
+    "ordinalDirection": {
+      "full": "Southwest",
+      "abbr": "SW"
+    },
+    "cardinalDirection": {
+      "normal": "West",
+      "full": "West",
+      "abbr": "W"
+    },
+    "city": "La Crosse",
+    "cityPrefix": "Fort",
+    "citySuffix": "shire",
+    "cityName": "Urbana",
+    "streetName": "Trantow Via",
+    "streetPrefix": "c",
+    "streetSuffix": "Via",
+    "secondaryAddress": "Suite 487",
+    "county": "Cambridgeshire",
+    "country": "Uganda",
+    "countryCode": "UM",
+    "state": "Washington",
+    "stateAbbr": "WA",
+    "zipCode": "48721-9061",
+    "timeZone": "Asia/Magadan",
+    "nearbyGPSCoordinate": ["77.1337", "-14.7545"]
+  }
+]
