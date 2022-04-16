@@ -1,0 +1,7 @@
+// Vitest Snapshot v1
+
+exports[`address > seed: 42 > city() 1`] = `"Port Valentine"`;
+
+exports[`address > seed: 1211 > city() 1`] = `"La Crosse"`;
+
+exports[`address > seed: 1337 > city() 1`] = `"New Carmelo"`;

@@ -1,4 +1,5 @@
 import type { Faker } from '.';
+import { FakerModule } from './module';
 
 /**
  * Converts degrees to radians.
@@ -72,8 +73,9 @@ function coordinateWithOffset(
 /**
  * Module to generate addresses and locations.
  */
-export class Address {
+export class Address extends FakerModule {
   constructor(private readonly faker: Faker) {
+    super();
     // Bind `this` so namespaced is working correctly
     for (const name of Object.getOwnPropertyNames(Address.prototype)) {
       if (name === 'constructor' || typeof this[name] !== 'function') {

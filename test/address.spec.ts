@@ -107,7 +107,7 @@ describe('address', () => {
         faker.seed(seed);
 
         const city = faker.address.city();
-        expect(city).toEqual(expectations.city);
+        expect(city).toMatchSnapshot();
       });
 
       it('cityPrefix()', () => {
